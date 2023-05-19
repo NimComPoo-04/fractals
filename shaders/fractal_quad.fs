@@ -30,7 +30,7 @@ void main(void)
 		Z = vec2(Z.x * Z.x - Z.y * Z.y, 2 * Z.x * Z.y) + C;
 	}
 
-	float j = float(i/10);
+	float j = float(i);
 
-	Fragcolor = mix(thematic_colors[i % 10], thematic_colors[(i+1) % 10], j / 10.0);
+	Fragcolor = thematic_colors[i % 10];// * mix(vec3(0, 0, 0), vec3(1, 1, 1), j/100);
 }

@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -ggdb -std=c11 -O0 # -Werror
+CFLAGS = -Wall -Wextra -ggdb -std=c18 -O0 # -Werror
 
 SRC = $(wildcard *.c)
 OBJ = $(SRC:%.c=obj/%.o)

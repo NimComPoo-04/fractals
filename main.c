@@ -112,11 +112,6 @@ int main(void)
 	fractal_quad_scale(1.0, 1.0);
 	fractal_quad_recenter(0.0, 0.0);
 
-	/*
-	fractal_quad_C(-0.4, 0.6);
-	fractal_quad_maxIteration(1000);
-	*/
-
 	while(!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT);

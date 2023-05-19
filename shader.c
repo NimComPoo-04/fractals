@@ -1,9 +1,12 @@
 #include <glad/glad.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include "shader.h"
 
-char *load_file(const char *file_name)
+#define MAX_SHADERS 10
+
+static char *load_file(const char *file_name)
 {
 	FILE *f = fopen(file_name, "r");
 	fseek(f, 0, SEEK_END);
@@ -14,6 +17,7 @@ char *load_file(const char *file_name)
 	return g;
 }
 
+// Loads a Shader from file
 GLuint shader_load(const char *file_name, GLenum type)
 {
 	char *src = load_file(file_name);
@@ -22,6 +26,7 @@ GLuint shader_load(const char *file_name, GLenum type)
 	glShaderSource(shader, 1, (const char * const *)&src, NULL);
 	glCompileShader(shader);
 
+	// Checks errors
 	int status;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
 	if(!status)
@@ -38,10 +43,9 @@ GLuint shader_load(const char *file_name, GLenum type)
 	return shader;
 }
 
-shader_t shader_create_program(const char *vertex_file, const char *fragment_file)
+// Links a shader program
+GLuint shader_link_program(GLuint vs, GLuint fs)
 {
-	GLuint vs = shader_load(vertex_file, GL_VERTEX_SHADER);
-	GLuint fs = shader_load(fragment_file, GL_FRAGMENT_SHADER);
 	GLuint p = glCreateProgram();
 	glAttachShader(p, vs);
 	glAttachShader(p, fs);
@@ -59,24 +63,49 @@ shader_t shader_create_program(const char *vertex_file, const char *fragment_fil
 		free(l);
 	}
 
-	return (shader_t){vs, fs, p};
+	glDeleteShader(vs);
+	glDeleteShader(fs);
+
+	return p;
 }
 
-void shader_delete(shader_t s)
+// Deletes a Shader
+void shader_delete(GLuint s)
 {
-	glDeleteProgram(s.p);
-	glDeleteShader(s.vs);
-	glDeleteShader(s.fs);
+	glDeleteProgram(s);
 }
 
-void shader_set_uniform2f(shader_t s, const char *name, float v1, float v2)
+void shader_use(GLuint s)
 {
-	GLuint u = glGetUniformLocation(s.p, name);
-	glUniform2f(u, v1, v2);
+	glUseProgram(s);
 }
 
-void shader_set_uniformi(shader_t s, const char *name, int v1)
+void shader_uniform(GLuint s, const char *name, GLenum type, ...)
 {
-	GLuint u = glGetUniformLocation(s.p, name);
-	glUniform1i(u, v1);
+	glUseProgram(s);
+	GLuint u = glGetUniformLocation(s, name);
+
+	va_list va;
+	va_start(va, type);
+
+	switch(type)
+	{
+		case GL_FLOAT_VEC2:
+			{
+				double v1 = va_arg(va, double);
+				double v2 = va_arg(va, double);
+				glUniform2f(u, (float)v1, (float)v2);
+			}
+			break;
+
+		case GL_INT:
+			{
+				int v = va_arg(va, int);
+				glUniform1i(u, v);
+			}
+			break;
+	}
+
+	va_end(va);
+	glUseProgram(0);
 }

@@ -1,6 +1,12 @@
 #ifndef _FRACTAL_QUAD_H_
 #define _FRACTAL_QUAD_H_
 
+enum
+{
+	JULIA_SET_FRACTAL = 0,
+	TOTAL_FRACTALS
+};
+
 void fractal_quad_create(void);
 void fractal_quad_draw(void);
 void fractal_quad_delete(void);
