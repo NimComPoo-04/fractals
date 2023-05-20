@@ -20,20 +20,37 @@ static buffer_t plane = {0};
 static GLuint shader_progs[TOTAL_FRACTALS] = {0};
 static GLuint prog = 0;
 
-void fractal_quad_create(void)
+void fractal_quad_create(int width, int height)
 {
 	plane = buffer_create(vertex, sizeof(vertex) / sizeof(float), index, 6);
 
-	GLuint vs = shader_load("shaders/fractal_quad.vs", GL_VERTEX_SHADER);
-	GLuint fs = shader_load("shaders/fractal_quad.fs", GL_FRAGMENT_SHADER);
-	shader_progs[JULIA_SET_FRACTAL] = shader_link_program(vs, fs);
+	GLuint vs, fs[2];
+
+	vs = shader_load("shaders/fractal_quad.vs", GL_VERTEX_SHADER);
+
+	fs[0] = shader_load("shaders/julia_set_fractal.fs", GL_FRAGMENT_SHADER);
+	shader_progs[JULIA_SET_FRACTAL] = shader_link_program(vs, fs[0]);
+
+	fs[1] = shader_load("shaders/mandelbrot_set_fractal.fs", GL_FRAGMENT_SHADER);
+	shader_progs[MANDELBROT_SET_FRACTAL] = shader_link_program(vs, fs[1]);
+
+	for(int i = 0; i < TOTAL_FRACTALS; i++)
+	{
+		prog = shader_progs[i];
+
+		fractal_quad_scale(1, 1);
+		fractal_quad_recenter(0, 0);
+		fractal_quad_resize(width, height);
+	}
+
 	prog = shader_progs[JULIA_SET_FRACTAL];
 
-	int status = 0;
-	glValidateProgram(prog);
-	glGetProgramiv(prog, GL_VALIDATE_STATUS, &status);
-
 	shader_use(prog);
+}
+
+void fractal_quad_bind(int type)
+{
+	prog = shader_progs[type];
 }
 
 void fractal_quad_draw(void)

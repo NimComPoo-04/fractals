@@ -37,6 +37,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		scale /= 1.1;
 		fractal_quad_scale(scale, scale);
 	}
+	else if(key == GLFW_KEY_C && action == GLFW_PRESS)
+	{
+		fractal_quad_bind(MANDELBROT_SET_FRACTAL);
+	}
 }
 
 void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
@@ -106,11 +110,7 @@ int main(void)
 	glDebugMessageCallback(ErrorCallbackGL, 0);
 
 	glViewport(0, 0, WIDTH, HEIGHT);
-	fractal_quad_create();
-
-	fractal_quad_resize(WIDTH, HEIGHT);
-	fractal_quad_scale(1.0, 1.0);
-	fractal_quad_recenter(0.0, 0.0);
+	fractal_quad_create(WIDTH, HEIGHT);
 
 	while(!glfwWindowShouldClose(window))
 	{

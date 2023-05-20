@@ -21,7 +21,7 @@ const vec3 thematic_colors[10] = {
 void main(void)
 {
 	vec2 C = vec2(-0.4, 0.6);
-	int max_iter = 1000;
+	int max_iter = 100;
 	vec2 Z = vec2(coordinates.xy);
 	int i = 0;
 
@@ -32,5 +32,5 @@ void main(void)
 
 	float j = float(i);
 
-	Fragcolor = thematic_colors[i % 10] * mix(vec3(0, 0, 0), vec3(1, 1, 1), j/100);
+	Fragcolor = thematic_colors[i % 10];
 }

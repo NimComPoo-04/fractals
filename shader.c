@@ -63,8 +63,10 @@ GLuint shader_link_program(GLuint vs, GLuint fs)
 		free(l);
 	}
 
+	/*
 	glDeleteShader(vs);
 	glDeleteShader(fs);
+	*/
 
 	return p;
 }
