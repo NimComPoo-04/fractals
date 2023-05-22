@@ -32,3 +32,25 @@
 ## BUGS ##
 
 * The scaling is not uniform throughout all the zoom levels [works now]
+
+
+## Arch ##
+
+Keep all state as global, initialize the global state.
+A Fractal is basically a mathematical computation happening in gpu, so the only cpu thing is uniform values
+this means they will have to handle their own ui. cool
+
+[ Load Assets ]
+[ Initilize Configs ]
+[ Connect with GPU ]
+[ Start Rendering ]
+[ Free Assets ]
+
+What does a fractal contain????
+
+A Shader for computation, 
+a Few Uniforms to control the data,
+Config that can be edited by elements
+
+you know what to use here, question is do you want to use it??
+OH HELL YEAH WHY IN THE WORLD NOT!!!

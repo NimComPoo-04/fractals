@@ -5,7 +5,7 @@ SRC = $(wildcard *.c)
 OBJ = $(SRC:%.c=obj/%.o)
 
 INC = -I libs/glfw/include -I libs/glad/include
-LIB = libs/glad/glad.o -L libs/glfw/lib-mingw-w64/ -lglfw3dll
+LIB = libs/glad/glad.o -L libs/glfw/lib-mingw-w64/ -lglfw3 -lopengl32 -luser32 -lgdi32
 
 EXE = fractals.exe
 
@@ -17,8 +17,11 @@ build:
 $(EXE): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^ $(LIB)
 
-obj/%.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $^ $(INC)
+obj/main.o: main.c
+	$(CC) $(CFLAGS) -c -o $@ $< $(INC)
+
+obj/%.o: %.c %.h
+	$(CC) $(CFLAGS) -c -o $@ $< $(INC)
 
 clean:
 	rm -rf obj $(EXE)

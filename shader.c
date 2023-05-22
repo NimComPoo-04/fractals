@@ -1,113 +1,134 @@
-#include <glad/glad.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
 #include "shader.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdarg.h>
 
-#define MAX_SHADERS 10
-
-static char *load_file(const char *file_name)
+char *load_file(const char *file_name)
 {
+	char *src = NULL;
+
 	FILE *f = fopen(file_name, "r");
+
+	if(f == NULL)
+		return src;
+
 	fseek(f, 0, SEEK_END);
-	size_t size = ftell(f);
+	int size = ftell(f);
 	fseek(f, 0, SEEK_SET);
-	char *g = calloc(size, 1);
-	fread(g, size, 1, f);
-	return g;
+
+	src = calloc(size+1, 1);
+	src[size] = 0;
+
+	fread(src, 1, size, f);
+
+	fclose(f);
+
+	return src;
 }
 
-// Loads a Shader from file
-GLuint shader_load(const char *file_name, GLenum type)
+GLuint create_shader_from_file(const char *filename, GLenum type)
 {
-	char *src = load_file(file_name);
+	char *c = load_file(filename);
 
-	GLuint shader = glCreateShader(type);
-	glShaderSource(shader, 1, (const char * const *)&src, NULL);
-	glCompileShader(shader);
+	if(c == NULL)
+		return 0;
 
-	// Checks errors
-	int status;
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
-	if(!status)
+	GLuint s = glCreateShader(type);
+	glShaderSource(s, 1, (const char * const *)&c, 0);
+
+	glCompileShader(s);
+
+	int status = 0;
+	glGetShaderiv(s, GL_COMPILE_STATUS, &status);
+
+	if(status != GL_TRUE)
 	{
 		int length;
-		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
-		char *l = calloc(length, 1);
-		glGetShaderInfoLog(shader, length, 0, l);
-		fprintf(stderr, "%s\n", l);
-		free(l);
+		glGetShaderiv(s, GL_INFO_LOG_LENGTH, &length);
+		char *message = calloc(length+1, 1);
+		glGetShaderInfoLog(s, length, NULL, message);
+		fprintf(stderr, "%s\n", message);
+		free(message);
 	}
 
-	free(src);
-	return shader;
+	free(c);
+	
+	return s;
 }
 
-// Links a shader program
-GLuint shader_link_program(GLuint vs, GLuint fs)
+GLuint create_shader_program(int size, ...)
 {
-	GLuint p = glCreateProgram();
-	glAttachShader(p, vs);
-	glAttachShader(p, fs);
-	glLinkProgram(p);
-
-	int status;
-	glGetProgramiv(p, GL_LINK_STATUS, &status);
-	if(!status)
-	{
-		int length;
-		glGetProgramiv(p, GL_INFO_LOG_LENGTH, &length);
-		char *l = calloc(length, 1);
-		glGetProgramInfoLog(p, length, 0, l);
-		fprintf(stderr, "%s\n", l);
-		free(l);
-	}
-
-	/*
-	glDeleteShader(vs);
-	glDeleteShader(fs);
-	*/
-
-	return p;
-}
-
-// Deletes a Shader
-void shader_delete(GLuint s)
-{
-	glDeleteProgram(s);
-}
-
-void shader_use(GLuint s)
-{
-	glUseProgram(s);
-}
-
-void shader_uniform(GLuint s, const char *name, GLenum type, ...)
-{
-	glUseProgram(s);
-	GLuint u = glGetUniformLocation(s, name);
+	GLuint prog = glCreateProgram();
 
 	va_list va;
-	va_start(va, type);
+	va_start(va, size); 
 
-	switch(type)
+	for(int i = 0; i < size; i++)
 	{
-		case GL_FLOAT_VEC2:
-			{
-				double v1 = va_arg(va, double);
-				double v2 = va_arg(va, double);
-				glUniform2f(u, (float)v1, (float)v2);
-			}
-			break;
-
-		case GL_INT:
-			{
-				int v = va_arg(va, int);
-				glUniform1i(u, v);
-			}
-			break;
+		GLuint s = va_arg(va, unsigned);
+		glAttachShader(prog, s);
 	}
 
 	va_end(va);
-	glUseProgram(0);
+
+	glLinkProgram(prog);
+
+	int status = 0;
+	glGetProgramiv(prog, GL_LINK_STATUS, &status);
+
+	if(status != GL_TRUE)
+	{
+		int length;
+		glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &length);
+		char *message = calloc(length+1, 1);
+		glGetProgramInfoLog(prog, length, NULL, message);
+		fprintf(stderr, "%s\n", message);
+		free(message);
+		return 0;
+	}
+
+	glValidateProgram(prog);
+
+	status = 0;
+	glGetProgramiv(prog, GL_VALIDATE_STATUS, &status);
+
+	if(status != GL_TRUE)
+	{
+		int length;
+		glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &length);
+		char *message = calloc(length+1, 1);
+		glGetProgramInfoLog(prog, length, NULL, message);
+		fprintf(stderr, "%s\n", message);
+		free(message);
+		return 0;
+	}
+
+	return prog;
+}
+
+void destroy_shader(GLuint prog)
+{
+	glDeleteProgram(prog);
+}
+
+void create_uniform(GLuint program, uniform_t *uniform)
+{
+	glUseProgram(program);
+	GLint l = glGetUniformLocation(program, uniform->name);
+	if(l < 0) return;
+	uniform->location = l;
+	set_uniform(program, uniform);
+}
+
+void set_uniform(GLuint program, uniform_t *uniform)
+{
+	glUseProgram(program);
+
+	switch(uniform->type)
+	{
+		case GL_FLOAT: glUniform1f(uniform->location, uniform->value_f1); break;
+		case GL_INT:   glUniform1i(uniform->location, uniform->value_i1); break;
+		case GL_FLOAT_VEC2: glUniform2f(uniform->location, uniform->value_f2[0], uniform->value_f2[1]); break;
+		case GL_INT_VEC2:   glUniform2i(uniform->location, uniform->value_i2[0], uniform->value_i2[1]); break;
+	}
 }
