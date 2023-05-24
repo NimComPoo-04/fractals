@@ -7,12 +7,8 @@ uniform sampler1D theme_texture;
 
 out vec3 FragColor;
 
-const int root_size = 3;
-const vec2 roots[root_size] = {
-	vec2(2, 0),
-	vec2(-2, 0),
-	vec2(0, 2)
-};
+uniform int root_size;
+uniform vec2 roots[10];
 
 vec2 cmul(vec2 a, vec2 b)
 {

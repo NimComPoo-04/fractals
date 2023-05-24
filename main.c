@@ -14,24 +14,18 @@ static int update(GLFWwindow *win, double time)
 	glClearColor(1.0, 0.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	switch(gCurrentFractal)
+	if(gFractals.movement_animation.isActive)
 	{
-		case JULIA_SET:
-			use_julia_set_shader(&gFractalJuliaSet);
-			break;
+		float *Center = gFractals.programs[gFractals.current].uniforms[FRACTAL_COMMON_CENTER].f2;
 
-		case MANDELBROT_SET:
-			use_mandelbrot_set_shader(&gFractalMandelbrotSet);
-			break;
+		Center[0] += gFractals.movement_animation.dx;
+		Center[1] += gFractals.movement_animation.dy;
 
-		case BURNING_SHIP:
-			use_burning_ship_shader(&gFractalBurningShip);
-			break;
-
-		case NEWTON_RAPHSON:
-			use_newton_raphson_shader(&gFractalNewtonRaphson);
-			break;
+		set_fractal_uniform(&gFractals, FRACTAL_COMMON_CENTER);
+		gFractals.movement_animation.isActive--;
 	}
+
+	use_fractal(&gFractals);
 
 	draw_mesh(&gFractalRenderQuad);
 
@@ -41,111 +35,28 @@ static int update(GLFWwindow *win, double time)
 void size_change_callback(GLFWwindow *win, int width, int height)
 {
 	(void)win;
-	switch(gCurrentFractal)
-	{
-		case JULIA_SET:
-			update_julia_set_Size(&gFractalJuliaSet, width, height);
-			break;
 
-		case MANDELBROT_SET:
-			update_mandelbrot_set_Size(&gFractalMandelbrotSet, width, height);
-			break;
-
-		case BURNING_SHIP:
-			update_burning_ship_Size(&gFractalBurningShip, width, height);
-			break;
-
-		case NEWTON_RAPHSON:
-			update_newton_raphson_Size(&gFractalNewtonRaphson, width, height);
-			break;
-	}
+	int *p = gFractals.programs[gFractals.current].uniforms[FRACTAL_COMMON_SIZE].i2;
+	p[0] = width;
+	p[1] = height;
+	set_fractal_uniform(&gFractals, FRACTAL_COMMON_SIZE);
 }
 
 void key_callback(GLFWwindow *win, int key, int scancode, int action, int mod)
 {
-	switch(key)
-	{
-		case GLFW_KEY_J:
-			gCurrentFractal = JULIA_SET;
-			break;
-
-		case GLFW_KEY_M:
-			gCurrentFractal = MANDELBROT_SET;
-			break;
-
-		case GLFW_KEY_B:
-			gCurrentFractal = BURNING_SHIP;
-			break;
-
-		case GLFW_KEY_N:
-			gCurrentFractal = NEWTON_RAPHSON;
-			break;
-	}
-
-	switch(gCurrentFractal)
-	{
-		case JULIA_SET:
-			key_ui_julia_set_update(&gFractalJuliaSet, win, key, action, mod);
-			break;
-
-		case MANDELBROT_SET:
-			key_ui_mandelbrot_set_update(&gFractalMandelbrotSet, win, key, action, mod);
-			break;
-
-		case BURNING_SHIP:
-			key_ui_burning_ship_update(&gFractalBurningShip, win, key, action, mod);
-			break;
-
-		case NEWTON_RAPHSON:
-			key_ui_newton_raphson_update(&gFractalNewtonRaphson, win, key, action, mod);
-			break;
-	}
+	fractal_key_control(win, key, scancode, action, mod);
 }
 
 int main(void)
 {
 	GLFWwindow *win = create_window(size_change_callback, key_callback);
+
 	create_mesh(&gFractalRenderQuad);
-
-	// Shaders
-	GLuint vs = create_shader_from_file("shaders/vertex.glsl", GL_VERTEX_SHADER);
-	GLuint fs1 = create_shader_from_file("shaders/julia_set.glsl", GL_FRAGMENT_SHADER);
-	GLuint fs2 = create_shader_from_file("shaders/mandelbrot_set.glsl", GL_FRAGMENT_SHADER);
-	GLuint fs3 = create_shader_from_file("shaders/burning_ship.glsl", GL_FRAGMENT_SHADER);
-	GLuint fs4 = create_shader_from_file("shaders/newton_rhapson.glsl", GL_FRAGMENT_SHADER);
-
-	// 1D texture themes
-	GLuint texture = 0;
-	float themes[] = {
-		1.0, 0.0, 0.0,
-		0.0, 1.0, 0.0,
-		0.0, 0.0, 1.0
-	};
-
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_1D, texture);
-	glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB, sizeof(themes)/sizeof(float)/3, 0, GL_RGB, GL_FLOAT, (void *)themes);
-	glGenerateMipmap(GL_TEXTURE_1D);
-
-	create_julia_set(&gFractalJuliaSet, vs, fs1, texture);
-	create_mandelbrot_set(&gFractalMandelbrotSet, vs, fs2, texture);
-	create_burning_ship(&gFractalBurningShip, vs, fs3, texture);
-	create_newton_raphson(&gFractalNewtonRaphson, vs, fs4, texture);
-
-	glDeleteShader(vs);
-	glDeleteShader(fs1);
-	glDeleteShader(fs2);
-	glDeleteShader(fs3);
-	glDeleteShader(fs4);
+	create_fractal(&gFractals);
 
 	start_window_main_loop(win, update);
 
-	destroy_julia_set(&gFractalJuliaSet);
-	destroy_burning_ship(&gFractalBurningShip);
-	destroy_mandelbrot_set(&gFractalMandelbrotSet);
-	destroy_newton_raphson(&gFractalNewtonRaphson);
-
-	glDeleteTextures(1, &texture);
+	destroy_fractal(&gFractals);
 	destroy_mesh(&gFractalRenderQuad);
 	destroy_window(win);
 }

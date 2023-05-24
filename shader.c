@@ -110,38 +110,3 @@ void destroy_shader(GLuint prog)
 {
 	glDeleteProgram(prog);
 }
-
-void create_uniform(GLuint program, uniform_t *uniform)
-{
-	glUseProgram(program);
-	GLint l = glGetUniformLocation(program, uniform->name);
-	if(l < 0) return;
-	uniform->location = l;
-	set_uniform(program, uniform);
-}
-
-void set_uniform(GLuint program, uniform_t *uniform)
-{
-	glUseProgram(program);
-
-	switch(uniform->type)
-	{
-		case GL_FLOAT: glUniform1f(uniform->location, uniform->value_f1); break;
-		case GL_INT:   glUniform1i(uniform->location, uniform->value_i1); break;
-		case GL_FLOAT_VEC2: glUniform2f(uniform->location, uniform->value_f2[0], uniform->value_f2[1]); break;
-		case GL_INT_VEC2:   glUniform2i(uniform->location, uniform->value_i2[0], uniform->value_i2[1]); break;
-	}
-}
-
-void set_uniform_array(GLuint program, uniform_t *uniform)
-{
-	glUseProgram(program);
-
-	switch(uniform->type)
-	{
-		case GL_FLOAT: glUniform1fv(uniform->location, uniform->count, uniform->value_fv); break;
-		case GL_INT:   glUniform1iv(uniform->location, uniform->count, uniform->value_iv); break;
-		case GL_FLOAT_VEC2: glUniform2fv(uniform->location, uniform->count, uniform->value_fv); break;
-		case GL_INT_VEC2:   glUniform2iv(uniform->location, uniform->count, uniform->value_iv); break;
-	}
-}

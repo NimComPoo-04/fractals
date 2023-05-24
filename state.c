@@ -32,9 +32,4 @@ gFractalRenderQuad = {
 	.number_of_indeces = sizeof indeces / sizeof(unsigned char)
 };
 
-julia_set_t gFractalJuliaSet = {0};
-mandelbrot_set_t gFractalMandelbrotSet = {0};
-burning_ship_t gFractalBurningShip = {0};
-newton_raphson_t gFractalNewtonRaphson = {0};
-
-int gCurrentFractal = JULIA_SET;
+fractal_t gFractals = {0};
