@@ -32,22 +32,8 @@ gFractalRenderQuad = {
 	.number_of_indeces = sizeof indeces / sizeof(unsigned char)
 };
 
+julia_set_t gFractalJuliaSet = {0};
+mandelbrot_set_t gFractalMandelbrotSet = {0};
+burning_ship_t gFractalBurningShip = {0};
 
-fractal_t gFractals[TOTAL_FRACTALS] = {
-	[JULIA_SET] =  {
-		.type = JULIA_SET,
-	}
-};
-
-int gCurrentFractal = 0;
-
-void initialize_program()
-{
-	gFractals[JULIA_SET] = create_julia_set_fractal();
-	create_mesh(&gFractalRenderQuad);
-}
-
-void destruct_program(void)
-{
-	destroy_mesh(&gFractalRenderQuad);
-}
+int gCurrentFractal = JULIA_SET;

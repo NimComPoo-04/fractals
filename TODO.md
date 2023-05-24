@@ -54,3 +54,12 @@ Config that can be edited by elements
 
 you know what to use here, question is do you want to use it??
 OH HELL YEAH WHY IN THE WORLD NOT!!!
+
+!!!
+
+OK LETS DO SOMETHING, LETS HAVE GLOBAL VARIABLES FOR STUFF OK!!
+DON'T BE FANCY JUST GET THIS DONE, LET EXTENSIBILITY BURN AND DIE!!
+CLEAN CODE IS A MYTH AND YOU ARE ONLY ONE MAN!!
+
+!!!
+

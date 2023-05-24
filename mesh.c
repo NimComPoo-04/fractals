@@ -20,10 +20,9 @@ void create_mesh(mesh_t *mesh)
 	glBindVertexArray(0);
 }
 
-void draw_mesh(mesh_t *mesh, unsigned shader_program)
+void draw_mesh(mesh_t *mesh)
 {
 	glBindVertexArray(mesh->vao);
-	glUseProgram(shader_program);
 	glDrawElements(mesh->draw_type, mesh->number_of_indeces, GL_UNSIGNED_BYTE, NULL);
 }
 

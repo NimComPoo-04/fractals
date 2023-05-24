@@ -1,7 +1,14 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "state.h"
 #include "window.h"
-#include "fractal.h"
-#include <stdio.h>
+
+typedef struct
+{
+	window_size_change_function_t size_callback;
+	window_key_function_t key_callback;
+} callbacks_t;
 
 static void error_handler(int errcode, const char *message)
 {
@@ -15,12 +22,18 @@ static void size_callback(GLFWwindow *window, int width, int height)
 	gWidth = width;
 	gHeight = height;
 
-	gFractals[JULIA_SET].uniforms[JULIA_SET_SCREEN_SIZE].value_i2[0] = gWidth;
-	gFractals[JULIA_SET].uniforms[JULIA_SET_SCREEN_SIZE].value_i2[1] = gHeight;
-	set_uniform(gFractals[JULIA_SET].program, &gFractals[JULIA_SET].uniforms[JULIA_SET_SCREEN_SIZE]);
+	((callbacks_t *)glfwGetWindowUserPointer(window)) -> size_callback(window, width, height);
 }
 
-GLFWwindow *create_window()
+static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod)
+{
+	if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, 1);
+
+	((callbacks_t *)glfwGetWindowUserPointer(window)) -> key_callback(window, key, scancode, action, mod);
+}
+
+GLFWwindow *create_window(window_size_change_function_t s, window_key_function_t k)
 {
 	GLFWwindow *win;
 
@@ -32,12 +45,19 @@ GLFWwindow *create_window()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	win = glfwCreateWindow(gWidth, gHeight, "(-_-)", NULL, NULL);
 
+	callbacks_t *callback = calloc(sizeof(callbacks_t), 1);
+	callback->size_callback = s;
+	callback->key_callback = k;
+
+	glfwSetWindowUserPointer(win, callback);
+
 	glfwMakeContextCurrent(win);
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	glfwSwapInterval(1);
 
 	glfwSetErrorCallback(error_handler);
 	glfwSetWindowSizeCallback(win, size_callback);
+	glfwSetKeyCallback(win, key_callback);
 
 	glViewport(0, 0, gWidth, gHeight);
 
@@ -48,7 +68,7 @@ void start_window_main_loop(GLFWwindow *win, window_update_function_t update)
 {
 	while(!glfwWindowShouldClose(win))
 	{
-		if(!update(glfwGetTime()))
+		if(!update(win, glfwGetTime()))
 			glfwSetWindowShouldClose(win, 1);
 
 		glfwPollEvents();
@@ -58,6 +78,7 @@ void start_window_main_loop(GLFWwindow *win, window_update_function_t update)
 
 void destroy_window(GLFWwindow *window)
 {
+	free(glfwGetWindowUserPointer(window));
 	glfwDestroyWindow(window);
 	glfwTerminate();
 }

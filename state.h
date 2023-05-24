@@ -14,13 +14,23 @@ extern int gHeight;
 extern mesh_t gFractalRenderQuad;
 
 // Fractals And Shaders
+// TODO: Make this stuff a little bit more extensible??
 
-#include "fractal.h"
+#include "julia_set.h"
+extern julia_set_t gFractalJuliaSet;
 
-extern fractal_t gFractals[TOTAL_FRACTALS];
+#include "mandelbrot_set.h"
+extern mandelbrot_set_t gFractalMandelbrotSet;
+
+#include "burning_ship.h"
+extern burning_ship_t gFractalBurningShip;
+
+enum {
+	JULIA_SET,
+	MANDELBROT_SET,
+	BURNING_SHIP,
+};
+
 extern int gCurrentFractal;
-
-void initialize_program(void);
-void destruct_program(void);
 
 #endif

@@ -5,7 +5,6 @@
 
 typedef struct
 {
-	int updated;		// Keeps a record if a unifrom is updated
 	const char *name;
 	GLint location;
 	GLenum type;

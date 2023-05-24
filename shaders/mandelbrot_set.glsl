@@ -4,13 +4,13 @@ in vec2 Coordinate;
 out vec3 FragColor;
 
 uniform int MaxIteration;
-uniform vec2 C;
 
 uniform sampler1D theme_texture;
 
 void main(void)
 {
-	vec2 Z = vec2(Coordinate);
+	vec2 C = vec2(Coordinate); 
+	vec2 Z = vec2(0.0, 0.0);
 	int i = 0;
 
 	for(i = 0; i < MaxIteration && dot(Z, Z) < 4.0f; i++)
