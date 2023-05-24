@@ -1,5 +1,5 @@
-#ifndef _MANDELBROT_SET_H_
-#define _MANDELBROT_SET_H_
+#ifndef _BURNING_SHIP_H_
+#define _BURNING_SHIP_H_
 
 #include "shader.h"
 
@@ -24,7 +24,6 @@ typedef struct
 void create_burning_ship(burning_ship_t *js, GLuint vs, GLuint fs, GLuint texture);
 
 void use_burning_ship_shader(burning_ship_t *ms);
-void update_burning_ship_C(burning_ship_t *, float a, float b);
 void update_burning_ship_Scale(burning_ship_t *, float a, float b);
 void update_burning_ship_Center(burning_ship_t *, float a, float b);
 void update_burning_ship_Size(burning_ship_t *, int a, int b);

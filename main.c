@@ -27,6 +27,10 @@ static int update(GLFWwindow *win, double time)
 		case BURNING_SHIP:
 			use_burning_ship_shader(&gFractalBurningShip);
 			break;
+
+		case NEWTON_RAPHSON:
+			use_newton_raphson_shader(&gFractalNewtonRaphson);
+			break;
 	}
 
 	draw_mesh(&gFractalRenderQuad);
@@ -50,6 +54,10 @@ void size_change_callback(GLFWwindow *win, int width, int height)
 		case BURNING_SHIP:
 			update_burning_ship_Size(&gFractalBurningShip, width, height);
 			break;
+
+		case NEWTON_RAPHSON:
+			update_newton_raphson_Size(&gFractalNewtonRaphson, width, height);
+			break;
 	}
 }
 
@@ -68,6 +76,10 @@ void key_callback(GLFWwindow *win, int key, int scancode, int action, int mod)
 		case GLFW_KEY_B:
 			gCurrentFractal = BURNING_SHIP;
 			break;
+
+		case GLFW_KEY_N:
+			gCurrentFractal = NEWTON_RAPHSON;
+			break;
 	}
 
 	switch(gCurrentFractal)
@@ -83,6 +95,10 @@ void key_callback(GLFWwindow *win, int key, int scancode, int action, int mod)
 		case BURNING_SHIP:
 			key_ui_burning_ship_update(&gFractalBurningShip, win, key, action, mod);
 			break;
+
+		case NEWTON_RAPHSON:
+			key_ui_newton_raphson_update(&gFractalNewtonRaphson, win, key, action, mod);
+			break;
 	}
 }
 
@@ -96,13 +112,14 @@ int main(void)
 	GLuint fs1 = create_shader_from_file("shaders/julia_set.glsl", GL_FRAGMENT_SHADER);
 	GLuint fs2 = create_shader_from_file("shaders/mandelbrot_set.glsl", GL_FRAGMENT_SHADER);
 	GLuint fs3 = create_shader_from_file("shaders/burning_ship.glsl", GL_FRAGMENT_SHADER);
+	GLuint fs4 = create_shader_from_file("shaders/newton_rhapson.glsl", GL_FRAGMENT_SHADER);
 
 	// 1D texture themes
 	GLuint texture = 0;
 	float themes[] = {
 		1.0, 0.0, 0.0,
 		0.0, 1.0, 0.0,
-		0.0, 0.0, 1.0,
+		0.0, 0.0, 1.0
 	};
 
 	glGenTextures(1, &texture);
@@ -113,19 +130,20 @@ int main(void)
 	create_julia_set(&gFractalJuliaSet, vs, fs1, texture);
 	create_mandelbrot_set(&gFractalMandelbrotSet, vs, fs2, texture);
 	create_burning_ship(&gFractalBurningShip, vs, fs3, texture);
+	create_newton_raphson(&gFractalNewtonRaphson, vs, fs4, texture);
 
 	glDeleteShader(vs);
 	glDeleteShader(fs1);
 	glDeleteShader(fs2);
 	glDeleteShader(fs3);
-
-	gCurrentFractal = JULIA_SET;
+	glDeleteShader(fs4);
 
 	start_window_main_loop(win, update);
 
 	destroy_julia_set(&gFractalJuliaSet);
 	destroy_burning_ship(&gFractalBurningShip);
 	destroy_mandelbrot_set(&gFractalMandelbrotSet);
+	destroy_newton_raphson(&gFractalNewtonRaphson);
 
 	glDeleteTextures(1, &texture);
 	destroy_mesh(&gFractalRenderQuad);

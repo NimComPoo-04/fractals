@@ -1,5 +1,5 @@
-#ifndef _BURNING_SHIP_H_
-#define _BURNING_SHIP_H_
+#ifndef _MANDELBROT_SET_H_
+#define _MANDELBROT_SET_H_
 
 #include "shader.h"
 

@@ -132,3 +132,16 @@ void set_uniform(GLuint program, uniform_t *uniform)
 		case GL_INT_VEC2:   glUniform2i(uniform->location, uniform->value_i2[0], uniform->value_i2[1]); break;
 	}
 }
+
+void set_uniform_array(GLuint program, uniform_t *uniform)
+{
+	glUseProgram(program);
+
+	switch(uniform->type)
+	{
+		case GL_FLOAT: glUniform1fv(uniform->location, uniform->count, uniform->value_fv); break;
+		case GL_INT:   glUniform1iv(uniform->location, uniform->count, uniform->value_iv); break;
+		case GL_FLOAT_VEC2: glUniform2fv(uniform->location, uniform->count, uniform->value_fv); break;
+		case GL_INT_VEC2:   glUniform2iv(uniform->location, uniform->count, uniform->value_iv); break;
+	}
+}

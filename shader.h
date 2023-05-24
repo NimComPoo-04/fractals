@@ -14,7 +14,10 @@ typedef struct
 		int   value_i2[2];
 		float value_f1;
 		float value_f2[2];
+		float *value_fv;
+		int   *value_iv;
 	};
+	int count;
 } uniform_t;
 
 GLuint create_shader_from_file(const char *filename, GLenum type);
@@ -24,5 +27,6 @@ void destroy_shader(GLuint prog);
 // FIXME: misleading name, create's no unifrom just fills up the rest of the struct
 void create_uniform(GLuint program, uniform_t *uniform);
 void set_uniform(GLuint program, uniform_t *uniform);	// sets the updated thing
+void set_uniform_array(GLuint program, uniform_t *uniform);	// sets the updated thing
 
 #endif

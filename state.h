@@ -25,10 +25,14 @@ extern mandelbrot_set_t gFractalMandelbrotSet;
 #include "burning_ship.h"
 extern burning_ship_t gFractalBurningShip;
 
+#include "newton_raphson.h"
+extern newton_raphson_t gFractalNewtonRaphson;
+
 enum {
 	JULIA_SET,
 	MANDELBROT_SET,
 	BURNING_SHIP,
+	NEWTON_RAPHSON
 };
 
 extern int gCurrentFractal;
