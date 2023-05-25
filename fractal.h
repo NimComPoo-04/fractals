@@ -51,8 +51,9 @@ typedef struct
 {
 	int isActive;
 	float dx; float dy;
+	void(*update)(void *);	// accepts fractal_t
 	int time_step;
-} movement_animation_t;
+} transition_t;
 
 typedef struct
 {
@@ -60,7 +61,8 @@ typedef struct
 	program_t programs[MAX_FRACTALS];
 	GLuint theme_texture;
 
-	movement_animation_t movement_animation;
+	transition_t movement_animation;
+	transition_t scaling_animation;
 } fractal_t;
 
 void create_fractal(fractal_t *f);

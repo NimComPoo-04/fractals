@@ -16,13 +16,11 @@ static int update(GLFWwindow *win, double time)
 
 	if(gFractals.movement_animation.isActive)
 	{
-		float *Center = gFractals.programs[gFractals.current].uniforms[FRACTAL_COMMON_CENTER].f2;
-
-		Center[0] += gFractals.movement_animation.dx;
-		Center[1] += gFractals.movement_animation.dy;
-
-		set_fractal_uniform(&gFractals, FRACTAL_COMMON_CENTER);
-		gFractals.movement_animation.isActive--;
+		gFractals.movement_animation.update(&gFractals);
+	}
+	if(gFractals.scaling_animation.isActive)
+	{
+		gFractals.scaling_animation.update(&gFractals);
 	}
 
 	use_fractal(&gFractals);

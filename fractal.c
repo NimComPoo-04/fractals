@@ -14,10 +14,17 @@ static float themes[] = {
 // total has been calibrated lol
 static float newton_rhapson_roots[20] = { -1.0, 0.0, 0.0, 1.0, 1.0, 0.0 };
 
+static void movement_transitions(void *ptr);
+static void scaling_transitions(void *ptr);
+
 void create_fractal(fractal_t *f)
 {
 	f->current = 0;
-	f->movement_animation.time_step = 15; // Just for testing
+	f->movement_animation.time_step = 20; // Just for testing
+	f->movement_animation.update = movement_transitions;
+
+	f->scaling_animation.update = scaling_transitions;
+	f->scaling_animation.time_step  = 20; // Just for testing
 
 	GLuint vs  = create_shader_from_file("shaders/vertex.glsl", GL_VERTEX_SHADER);
 	GLuint fs1 = create_shader_from_file("shaders/julia_set.glsl", GL_FRAGMENT_SHADER);
@@ -198,18 +205,24 @@ void fractal_key_control(GLFWwindow *win, int key, int scancode, int action, int
 			case GLFW_KEY_W:
 				{
 					float *f = gFractals.programs[gFractals.current].uniforms[FRACTAL_COMMON_SCALE].f2;
-					f[0] *= 1.1;
-					f[1] *= 1.1;
-					set_fractal_uniform(&gFractals, FRACTAL_COMMON_SCALE);
+
+					gFractals.scaling_animation.isActive = gFractals.scaling_animation.time_step;
+					gFractals.scaling_animation.dx = 1.1 * f[0] / gFractals.scaling_animation.time_step;
+					gFractals.scaling_animation.dy = 1.1 * f[1] / gFractals.scaling_animation.time_step;
 				}
 				break;
 
+// XXX: I do not have a single clue why putting 1.8 instead of 1.1 works, its a real mistry but
+// 	it does so i am not complaining
+// XXX: I always assumed that reapated substration would be division but ig i am wrong
+// FIXME: Find out the real mathematical reason behind this weird behavior
 			case GLFW_KEY_S:
 				{
 					float *f = gFractals.programs[gFractals.current].uniforms[FRACTAL_COMMON_SCALE].f2;
-					f[0] /= 1.1;
-					f[1] /= 1.1;
-					set_fractal_uniform(&gFractals, FRACTAL_COMMON_SCALE);
+
+					gFractals.scaling_animation.isActive = gFractals.scaling_animation.time_step;
+					gFractals.scaling_animation.dx = -f[0] / 1.8 / gFractals.scaling_animation.time_step;
+					gFractals.scaling_animation.dy = -f[1] / 1.8 / gFractals.scaling_animation.time_step;
 				}
 				break;
 
@@ -247,4 +260,28 @@ void fractal_key_control(GLFWwindow *win, int key, int scancode, int action, int
 				break;
 		}
 	}
+}
+
+static void movement_transitions(void *ptr)
+{
+	fractal_t *f = (fractal_t *)ptr;
+	float *Center = f->programs[f->current].uniforms[FRACTAL_COMMON_CENTER].f2;
+
+	Center[0] += f->movement_animation.dx;
+	Center[1] += f->movement_animation.dy;
+
+	set_fractal_uniform(f, FRACTAL_COMMON_CENTER);
+	f->movement_animation.isActive--;
+}
+
+static void scaling_transitions(void *ptr)
+{
+	fractal_t *g = ptr;
+
+	float *f = g->programs[g->current].uniforms[FRACTAL_COMMON_SCALE].f2;
+	f[0] += g->scaling_animation.dx;
+	f[1] += g->scaling_animation.dy;
+
+	set_fractal_uniform(g, FRACTAL_COMMON_SCALE);
+	g->scaling_animation.isActive--;
 }
