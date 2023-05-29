@@ -17,4 +17,7 @@ extern mesh_t gFractalRenderQuad;
 #include "fractal.h"
 extern fractal_t gFractals;
 
+#include "glowy_points.h"
+extern glowy_points_t gGlowyPoints;
+
 #endif

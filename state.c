@@ -33,3 +33,5 @@ gFractalRenderQuad = {
 };
 
 fractal_t gFractals = {0};
+
+glowy_points_t gGlowyPoints = {0};

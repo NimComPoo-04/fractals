@@ -31,6 +31,7 @@ typedef struct
 
 void create_mesh(mesh_t *mesh);
 void draw_mesh(mesh_t *mesh);
+void draw_mesh_array(mesh_t *mesh);
 void destroy_mesh(mesh_t *mesh);
 
 #endif

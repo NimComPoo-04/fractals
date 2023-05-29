@@ -26,6 +26,12 @@ void draw_mesh(mesh_t *mesh)
 	glDrawElements(mesh->draw_type, mesh->number_of_indeces, GL_UNSIGNED_BYTE, NULL);
 }
 
+void draw_mesh_array(mesh_t *mesh)
+{
+	glBindVertexArray(mesh->vao);
+	glDrawArrays(mesh->draw_type, 0, mesh->number_of_verteces);
+}
+
 void destroy_mesh(mesh_t *mesh)
 {
 	glDeleteVertexArrays(1, &mesh->vao);

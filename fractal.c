@@ -19,7 +19,7 @@ static void scaling_transitions(void *ptr);
 
 void create_fractal(fractal_t *f)
 {
-	f->current = 0;
+	f->current = MANDELBROT_SET;
 	f->movement_animation.time_step = 20; // Just for testing
 	f->movement_animation.update = movement_transitions;
 
@@ -109,7 +109,7 @@ void create_fractal(fractal_t *f)
 	};
 	set_fractal_uniform(f, FRACTAL_NEWTON_RAPHSON_ROOTS);
 
-	f->current = JULIA_SET;
+	f->current = MANDELBROT_SET;
 }
 
 void set_fractal_uniform(fractal_t *f, int pos)
