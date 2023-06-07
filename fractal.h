@@ -70,6 +70,4 @@ void set_fractal_uniform(fractal_t *f, int pos);
 void use_fractal(fractal_t *f);
 void destroy_fractal(fractal_t *f);
 
-void fractal_key_control(GLFWwindow *win, int key, int scancode, int action, int mod);
-
 #endif

@@ -41,6 +41,7 @@ GLFWwindow *create_window(window_size_change_function_t s, window_key_function_t
 		return NULL;
 
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	win = glfwCreateWindow(gWidth, gHeight, "(-_-)", NULL, NULL);

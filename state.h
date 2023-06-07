@@ -6,6 +6,7 @@
 // Screen Width and Height
 extern int gWidth;
 extern int gHeight;
+extern int gFPS;
 
 // Mesh that needs to be rendered
 
@@ -19,5 +20,8 @@ extern fractal_t gFractals;
 
 #include "glowy_points.h"
 extern glowy_points_t gGlowyPoints;
+
+#include "font.h"
+extern font_t gFont;
 
 #endif

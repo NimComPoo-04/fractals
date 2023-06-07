@@ -4,6 +4,7 @@
 
 int gWidth = 800;
 int gHeight = 800;
+int gFPS = 0;
 
 static float
 verteces[12] = {
@@ -35,3 +36,5 @@ gFractalRenderQuad = {
 fractal_t gFractals = {0};
 
 glowy_points_t gGlowyPoints = {0};
+
+font_t gFont = {0};

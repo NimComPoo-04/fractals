@@ -6,12 +6,15 @@ void create_glowy_points(glowy_points_t *m)
 {
 	glGenVertexArrays(1, &m->vao);
 	glBindVertexArray(m->vao);
+
 	glGenBuffers(1, &m->vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, m->vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof m->position, m->position, GL_DYNAMIC_DRAW);
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
-	glBindVertexArray(m->vao);
+
+	glBindVertexArray(0);
 
 	GLuint vs = create_shader_from_file("shaders/glowy_points_vs.glsl", GL_VERTEX_SHADER);
 	GLuint fs = create_shader_from_file("shaders/glowy_points_fs.glsl", GL_FRAGMENT_SHADER);
@@ -44,8 +47,10 @@ void update_glowy_points(glowy_points_t *m)
 	glUniform2fv(m->C,      1, gFractals.programs[gFractals.current].uniforms[FRACTAL_JULIA_SET_C].f2);
 
 	glBindVertexArray(m->vao);
+	glBindBuffer(GL_ARRAY_BUFFER, m->vbo);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof m->position, m->position);
 	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void draw_glowy_points(glowy_points_t *k)
@@ -54,6 +59,7 @@ void draw_glowy_points(glowy_points_t *k)
 	glBindVertexArray(k->vao);
 	glLineWidth(3);
 	glDrawArrays(GL_POINTS, 0, 1);
+	glBindVertexArray(0);
 }
 
 void destroy_glowy_points(glowy_points_t  *k)
@@ -71,6 +77,4 @@ void update_glowy_points_start(glowy_points_t *g, double x, double y)
 
 	g->position[0] = (float)fx;
 	g->position[1] = (float)fy;
-
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof g->position, g->position);
 }
