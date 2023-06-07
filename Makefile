@@ -1,11 +1,12 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -ggdb -std=c18 -O0
+# CFLAGS = -Wall -Wextra -ggdb -std=c18 -O0	 # Debug
+CFLAGS = -std=c18 -O2	# Release
 
 SRC = $(wildcard *.c)
 OBJ = $(SRC:%.c=obj/%.o)
 
 INC = -I libs/glfw/include -I libs/glad/include
-LIB = libs/glad/glad.o -L libs/glfw/lib-mingw-w64/ -lglfw3 -lopengl32 -luser32 -lgdi32
+LIB = libs/glad/glad.o -L libs/glfw/lib-mingw-w64/ -lglfw3dll
 
 EXE = fractals.exe
 
@@ -13,6 +14,7 @@ all: build $(EXE)
 
 build:
 	@mkdir -p obj
+	@cp libs/glfw/lib-mingw-w64/glfw3.dll .
 
 $(EXE): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^ $(LIB)
