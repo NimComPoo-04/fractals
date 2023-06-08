@@ -17,7 +17,7 @@ one specific equation for reasons that will be explained shortly.
 The program can be used to visualize a few of the many fractals that exist which can assist in understanding
 of the mathematics behind them.
 
-#Images
+# Images
 
 * ![Mandelbrot Set]("imgs/mandel.PNG")
 * ![Julia Set]("imgs/julia.PNG")
