@@ -17,6 +17,12 @@ one specific equation for reasons that will be explained shortly.
 The program can be used to visualize a few of the many fractals that exist which can assist in understanding
 of the mathematics behind them.
 
+#Images
+
+* ![Mandelbrot Set]("imgs/mandel.PNG")
+* ![Julia Set]("imgs/julia.PNG")
+* ![Burning Ship Fractal]("imgs/Burning.PNG")
+
 # How to Use
 
 * The Left Mouse Button can be used to move arround on the fractal.

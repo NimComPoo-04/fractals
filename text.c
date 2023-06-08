@@ -52,7 +52,7 @@ text_t create_text(float x, float y, float w, const char *str)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * VERT, 0);
 
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * VERT, sizeof(float) * 3);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * VERT, (void *)(intptr_t)(sizeof(float) * 3));
 /*
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * VERT, sizeof(float) * 5);

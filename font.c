@@ -106,7 +106,7 @@ void draw_font(font_t *f)
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
 		glEnableVertexAttribArray(0);
 
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, sizeof(float) * 3);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void *)(intptr_t)(sizeof(float) * 3));
 		glEnableVertexAttribArray(1);
 
 		glBindVertexArray(0);

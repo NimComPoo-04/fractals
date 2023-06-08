@@ -376,8 +376,8 @@ int main(void)
 
 	FRUC_text[MANDELBROT_SET] = create_text(0, 0.6, 0.7, "MANDELBROT SET");
 	FRUC_text[JULIA_SET] = create_text(0, 0.6, 0.7, "JULIA SET");
-	FRUC_text[BURNING_SHIP] = create_text(0, 0.6, 0.7, "BURNING SET");
-	FRUC_text[NEWTON_RAPHSON] = create_text(0, 0.6, 0.7, "NEWTON RHAPSON");
+	FRUC_text[BURNING_SHIP] = create_text(0, 0.6, 0.7, "BURNING SHIP FRACTAL");
+	FRUC_text[NEWTON_RAPHSON] = create_text(0, 0.6, 0.7, "NEWTON RHAPSON FRACTAL");
 
 	C_text = create_text(0, 0.8, 0.7, "C: -0.4000 +0.6000 I");
 
