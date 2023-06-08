@@ -19,9 +19,9 @@ of the mathematics behind them.
 
 # Images
 
-* ![Mandelbrot Set]("imgs/mandel.PNG")
-* ![Julia Set]("imgs/julia.PNG")
-* ![Burning Ship Fractal]("imgs/Burning.PNG")
+* ![Mandelbrot Set]("https://raw.githubusercontent.com/NimComPoo-04/fractals/main/imgs/mandel.PNG")
+* ![Julia Set]("https://raw.githubusercontent.com/NimComPoo-04/fractals/main/imgs/julia.PNG")
+* ![Burning Ship Fractal]("https://raw.githubusercontent.com/NimComPoo-04/fractals/main/imgs/Burning.PNG")
 
 # How to Use
 
