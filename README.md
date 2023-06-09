@@ -19,11 +19,13 @@ of the mathematics behind them.
 
 **Video Link :** https://youtu.be/Rai7Idyv--w
 
-#Images
+# Images
 
-* ![Mandelbrot Set](imgs/mandel.PNG)
-* ![Julia Set](imgs/julia.PNG)
-* ![Burning Ship Fractal](imgs/Burning.PNG)
+![Mandelbrot Set](imgs/mandel.PNG)
+
+![Julia Set](imgs/julia.PNG)
+
+![Burning Ship Fractal](imgs/Burning.PNG)
 
 # How to Use
 
