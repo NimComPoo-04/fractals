@@ -21,9 +21,11 @@ of the mathematics behind them.
 
 #Images
 
-* ![Mandelbrot Set](imgs/mandel.PNG)
-* ![Julia Set](imgs/julia.PNG)
-* ![Burning Ship Fractal](imgs/Burning.PNG)
+![Mandelbrot Set](imgs/mandel.PNG)
+
+![Julia Set](imgs/julia.PNG)
+
+![Burning Ship Fractal](imgs/Burning.PNG)
 
 # How to Use
 
