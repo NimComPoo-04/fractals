@@ -89,3 +89,8 @@ will download all the required libraries :( sorry.*
 
 * CBFG (Has been used to generate Bitmap Fonts): http://www.codehead.co.uk/cbfg/
 * BFF Font File Format Documentation: https://documentation.help/Codehead-Bitmap-Font-Generator/bffformat.html
+
+# Correction
+
+The Vertical Axis is completely flipped, i.e. the value of the Y-axis increase when moving from the top of the screen to the bottom of the screen.
+I do not know how I did not notice this issue earlier. I am extremely sorry for this :(, This should be fixed now.

@@ -12,12 +12,12 @@ void main(void)
 {
 	gl_Position = vec4(Position, 1.0);
 
-	vec2 aspect_ratio = vec2(1.0, 1.0);
+	vec2 aspect_ratio = vec2(1.0, -1.0);
 	
 	if(ScreenSize.x > ScreenSize.y)
-		aspect_ratio.x = float(ScreenSize.x) / float(ScreenSize.y);
+		aspect_ratio.x *= float(ScreenSize.x) / float(ScreenSize.y);
 	else
-		aspect_ratio.y = float(ScreenSize.y) / float(ScreenSize.x);
+		aspect_ratio.y *= float(ScreenSize.y) / float(ScreenSize.x);
 
 	Coordinate = Position.xy * aspect_ratio / Scale + Center;
 }

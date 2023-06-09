@@ -55,7 +55,7 @@ static int update(GLFWwindow *win, double time)
 		float *Scale = gFractals.programs[gFractals.current].uniforms[FRACTAL_COMMON_SCALE].f2;
 
 		float x = ratio[0] * (float)gx / Scale[0];
-		float y = -ratio[1] * (float)gy / Scale[1];
+		float y = ratio[1] * (float)gy / Scale[1];
 
 		gFractals.movement_animation.isActive = gFractals.movement_animation.time_step;
 		gFractals.movement_animation.dx = x / gFractals.movement_animation.time_step;
